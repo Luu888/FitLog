@@ -49,28 +49,31 @@ window.showToast = function (message, type = "info", duration = 3000) {
 document.addEventListener('submit', function (e) {
     const form = e.target.closest('form');
     if (!form) return;
-    if (form.getAttribute('asp-action') === 'Import') {
-        e.preventDefault();
 
-        const formData = new FormData(form);
-        fetch(form.action, {
-            method: 'POST',
-            body: formData
+    // sprawdzamy, czy formularz jest w modalu
+    const modalEl = form.closest('.modal');
+    if (!modalEl) return;
+
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+        .then(r => r.json())
+        .then(data => {
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+            window.showToast(data.message, data.type);
+
+            if (data.success) {
+                window.location.reload();
+            }
         })
-            .then(r => r.json())
-            .then(data => {
-                const modalEl = form.closest('.modal');
-                const modal = bootstrap.Modal.getInstance(modalEl);
-                if (modal) modal.hide();
-                window.showToast(data.message, data.type);
-
-                if (data.success) {
-                    window.location.reload();
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                window.showToast("Unexpected error during import!", "danger");
-            });
-    }
+        .catch(err => {
+            console.error(err);
+            window.showToast("Unexpected error during import!", "danger");
+        });
 });
