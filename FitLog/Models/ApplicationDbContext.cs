@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FitLog.Models.DatabaseEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitLog.Models
 {
@@ -8,5 +9,7 @@ namespace FitLog.Models
             : base(options)
         {
         }
+
+        public DbSet<DailyEntry> DailyEntries { get; set; }
     }
 }

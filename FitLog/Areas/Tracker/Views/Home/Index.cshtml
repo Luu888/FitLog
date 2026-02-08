@@ -1,0 +1,14 @@
+﻿@using FitLog.Areas.Tracker.ViewModels.Home
+@model List<IndexViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Tracker Records</h2>
+
+<button class="btn btn-primary float-end" 
+        data-modal-url="@Url.Action("ImportModal", "Home", new { area = "Tracker" })">
+    <i class="bi bi-upload"></i> Import
+</button>
+
+@await Html.PartialAsync("_List", Model)
