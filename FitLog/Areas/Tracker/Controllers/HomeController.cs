@@ -4,6 +4,7 @@ using FitLog.Areas.Tracker.ViewModels.Home;
 using FitLog.Helpers;
 using FitLog.Models.Enums.Errors;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
 
 namespace FitLog.Areas.Tracker.Controllers
 {
@@ -38,7 +39,6 @@ namespace FitLog.Areas.Tracker.Controllers
         [HttpPost]
         public async Task<IActionResult> Import(IFormFile file)
         {
-            int result;
 
             if (file != null && file.Length > 0)
             {
@@ -48,37 +48,15 @@ namespace FitLog.Areas.Tracker.Controllers
                 csv.Context.RegisterClassMap<FitatuImportViewModelMap>();
                 var importList = csv.GetRecords<ImportViewModel>().ToList();
 
-                result = await _service.ImportAsync(importList);
+                var result = await _service.ImportAsync(importList);
+
+                return ToastHelper.ToJsonResult<FitatuImportError>(result);
             }
             else
             {
-                result = (int)FitatuImportError.FileNotFound;
+                return ToastHelper.ToJsonResult<FitatuImportError>((int)FitatuImportError.FileNotFound);
             }
 
-            string message;
-            string type;
-
-            switch (result)
-            {
-                case -2:
-                    message = "Import failed: entries for some dates already exist!";
-                    type = "danger";
-                    break;
-                case -1:
-                    message = "No file was uploaded.";
-                    type = "warning";
-                    break;
-                case 0:
-                    message = "No entries were imported.";
-                    type = "info";
-                    break;
-                default:
-                    message = "Import successful!";
-                    type = "success";
-                    break;
-            }
-
-            return Json(new { success = result > 0, message, type });
         }
 
     }
