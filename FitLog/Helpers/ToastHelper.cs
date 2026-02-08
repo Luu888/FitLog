@@ -16,15 +16,23 @@ namespace FitLog.Helpers
             var memberInfo = typeof(T).GetMember(enumValue.ToString()).FirstOrDefault();
             var toastAttr = memberInfo?.GetCustomAttribute<ToastAttribute>();
 
-            string message = toastAttr?.Message ?? enumValue.ToString();
+            string message;
+            string type;
 
-            string type = result > 0 ? "success" :
-                          result == 0 ? "warning" :
-                          "danger";
-            if (result < 0 && toastAttr != null)
+            if (result > 0)
             {
-                type = toastAttr.Type ?? "danger";
-                message = toastAttr.Message ?? message;
+                type = "success";
+                message = "Success";
+            }
+            else if (result == 0)
+            {
+                type = "warning";
+                message = toastAttr?.Message ?? "No entries were imported.";
+            }
+            else
+            {
+                type = "danger";
+                message = toastAttr?.Message ?? "Error occurred.";
             }
 
             bool success = result > 0;
@@ -32,6 +40,7 @@ namespace FitLog.Helpers
             return new JsonResult(new { success, message, type });
         }
     }
+
 
 
 }

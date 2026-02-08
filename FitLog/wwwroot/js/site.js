@@ -50,7 +50,6 @@ document.addEventListener('submit', function (e) {
     const form = e.target.closest('form');
     if (!form) return;
 
-    // sprawdzamy, czy formularz jest w modalu
     const modalEl = form.closest('.modal');
     if (!modalEl) return;
 
@@ -69,7 +68,12 @@ document.addEventListener('submit', function (e) {
             window.showToast(data.message, data.type);
 
             if (data.success) {
-                window.location.reload();
+                fetch('/Tracker/Home/Table')
+                    .then(r => r.text())
+                    .then(html => {
+                        document.getElementById('table-container').innerHTML = html;
+                    })
+                    .catch(err => console.error('Error refreshing table:', err));
             }
         })
         .catch(err => {

@@ -30,6 +30,14 @@ namespace FitLog.Areas.Tracker.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Table()
+        {
+            var entities = await _service.GetAllAsync();
+            var viewModel = _mapper.Map<List<IndexViewModel>>(entities);
+            return PartialView("_List", viewModel);
+        }
+
+        [HttpGet]
         public IActionResult ImportModal()
         {
             var model = new ImportViewModel();
