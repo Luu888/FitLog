@@ -6,9 +6,10 @@
 
 <h2>Tracker Records</h2>
 
-<button class="btn btn-primary float-end" 
-        data-modal-url="@Url.Action("ImportModal", "Home", new { area = "Tracker" })">
-    <i class="bi bi-upload"></i> Import
-</button>
-
+<div class="mb-3 d-flex justify-content-end">
+    <button class="btn btn-primary" 
+            data-modal-url="@Url.Action("ImportModal", "Home", new { area = "Tracker" })">
+        <i class="bi bi-upload"></i> Import
+    </button>
+</div>
 @await Html.PartialAsync("_List", Model)
