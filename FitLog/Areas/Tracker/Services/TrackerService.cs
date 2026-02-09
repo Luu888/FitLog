@@ -10,9 +10,12 @@ namespace FitLog.Areas.Tracker.Services
 {
     public class TrackerService : BaseService<DailyEntry>, ITrackerService
     {
-        public TrackerService(ApplicationDbContext context)
+        private readonly ICurrentUserService _currentUserService;
+
+        public TrackerService(ApplicationDbContext context, ICurrentUserService currentUserService)
             : base(context)
-        { 
+        {
+            _currentUserService = currentUserService;
         }
 
         public override IQueryable<DailyEntry> GetAsQueryable()
@@ -20,7 +23,7 @@ namespace FitLog.Areas.Tracker.Services
             return _context
                 .DailyEntries
                 .Include(i => i.Meals)
-                .Where(x => !x.IsDeleted);
+                .Where(x => x.CreatedByUserId == _currentUserService.UserId && !x.IsDeleted);
         }
 
         public async Task<int> ImportAsync(List<ImportViewModel> list)
@@ -32,6 +35,7 @@ namespace FitLog.Areas.Tracker.Services
                 {
                     Date = g.Key,
                     CreatedAt = now,
+                    CreatedByUserId = _currentUserService.UserId,
                     Meals = g.Select(m => new MealEntry
                     {
                         MealName = m.MealName,
@@ -42,13 +46,15 @@ namespace FitLog.Areas.Tracker.Services
                         Sugars = m.Sugars,
                         Protein = m.Protein,
                         Fiber = m.Fiber,
-                        Salt = m.Salt
+                        Salt = m.Salt,
+                        CreatedByUserId = _currentUserService.UserId,
+                        CreatedAt = now
                     }).ToList()
                 })
                 .ToList();
 
             var datesToCheck = entries.Select(e => e.Date).ToList();
-            var existingDates = await _context.DailyEntries
+            var existingDates = await GetAsQueryable()
                 .Where(d => datesToCheck.Any(dc => dc.Date == d.Date.Date && !d.IsDeleted))
                 .Select(d => d.Date.Date)
                 .ToListAsync();

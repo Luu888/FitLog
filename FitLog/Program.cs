@@ -2,8 +2,9 @@ using FitLog.Areas.Tracker.Services;
 using FitLog.Models;
 using FitLog.Models.DatabaseEntities;
 using FitLog.Seed;
-using Microsoft.EntityFrameworkCore;
+using FitLog.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<ITrackerService, TrackerService>();
 

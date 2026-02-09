@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitLog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260209114417_Initial")]
-    partial class Initial
+    [Migration("20260209180827_InitMigration")]
+    partial class InitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,6 +101,10 @@ namespace FitLog.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
@@ -113,10 +117,17 @@ namespace FitLog.Migrations
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<decimal>("WorkoutCalories")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("UpdatedByUserId");
 
                     b.ToTable("DailyEntries");
                 });
@@ -137,6 +148,10 @@ namespace FitLog.Migrations
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("DailyEntryId")
                         .HasColumnType("int");
@@ -169,9 +184,16 @@ namespace FitLog.Migrations
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedByUserId");
+
                     b.HasIndex("DailyEntryId");
+
+                    b.HasIndex("UpdatedByUserId");
 
                     b.ToTable("MealEntries");
                 });
@@ -313,15 +335,46 @@ namespace FitLog.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FitLog.Models.DatabaseEntities.DailyEntry", b =>
+                {
+                    b.HasOne("FitLog.Models.DatabaseEntities.ApplicationUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FitLog.Models.DatabaseEntities.ApplicationUser", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
             modelBuilder.Entity("FitLog.Models.DatabaseEntities.MealEntry", b =>
                 {
+                    b.HasOne("FitLog.Models.DatabaseEntities.ApplicationUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("FitLog.Models.DatabaseEntities.DailyEntry", "DailyEntry")
                         .WithMany("Meals")
                         .HasForeignKey("DailyEntryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FitLog.Models.DatabaseEntities.ApplicationUser", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId");
+
+                    b.Navigation("CreatedByUser");
+
                     b.Navigation("DailyEntry");
+
+                    b.Navigation("UpdatedByUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

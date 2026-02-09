@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FitLog.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,24 +48,6 @@ namespace FitLog.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DailyEntries",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    Steps = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    WorkoutCalories = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DailyEntries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,6 +157,37 @@ namespace FitLog.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DailyEntries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    Steps = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    WorkoutCalories = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    UpdatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DailyEntries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DailyEntries_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DailyEntries_AspNetUsers_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MealEntries",
                 columns: table => new
                 {
@@ -191,12 +204,25 @@ namespace FitLog.Migrations
                     Fiber = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Salt = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    UpdatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MealEntries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MealEntries_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MealEntries_AspNetUsers_UpdatedByUserId",
+                        column: x => x.UpdatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_MealEntries_DailyEntries_DailyEntryId",
                         column: x => x.DailyEntryId,
@@ -245,9 +271,29 @@ namespace FitLog.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DailyEntries_CreatedByUserId",
+                table: "DailyEntries",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DailyEntries_UpdatedByUserId",
+                table: "DailyEntries",
+                column: "UpdatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MealEntries_CreatedByUserId",
+                table: "MealEntries",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MealEntries_DailyEntryId",
                 table: "MealEntries",
                 column: "DailyEntryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MealEntries_UpdatedByUserId",
+                table: "MealEntries",
+                column: "UpdatedByUserId");
         }
 
         /// <inheritdoc />
@@ -275,10 +321,10 @@ namespace FitLog.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "DailyEntries");
 
             migrationBuilder.DropTable(
-                name: "DailyEntries");
+                name: "AspNetUsers");
         }
     }
 }
