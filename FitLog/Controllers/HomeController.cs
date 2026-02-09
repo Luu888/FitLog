@@ -1,6 +1,7 @@
-using System.Diagnostics;
 using FitLog.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace FitLog.Controllers
 {

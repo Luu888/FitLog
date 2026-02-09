@@ -3,11 +3,13 @@ using FitLog.Areas.Tracker.Services;
 using FitLog.Areas.Tracker.ViewModels.Home;
 using FitLog.Helpers;
 using FitLog.Models.Enums.Errors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
 
 namespace FitLog.Areas.Tracker.Controllers
 {
+    [Authorize]
     [Area(nameof(Tracker))]
     public class HomeController : Controller
     {
