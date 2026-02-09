@@ -11,5 +11,6 @@ namespace FitLog.Models
         }
 
         public DbSet<DailyEntry> DailyEntries { get; set; }
+        public DbSet<MealEntry> MealEntries { get; set; }
     }
 }

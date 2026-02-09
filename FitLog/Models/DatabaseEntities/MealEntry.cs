@@ -1,10 +1,12 @@
-﻿namespace FitLog.Areas.Tracker.ViewModels.Home
+﻿namespace FitLog.Models.DatabaseEntities
 {
-    public class ImportViewModel
+    public class MealEntry : BaseTable
     {
-        public DateTime Date { get; set; }
+        public int DailyEntryId { get; set; }
+        public DailyEntry DailyEntry { get; set; }
+
         public string MealName { get; set; }
-        public decimal Calories { get; set; }    
+        public decimal Calories { get; set; }
         public decimal Fat { get; set; }
         public decimal SaturatedFat { get; set; }
         public decimal Carbohydrates { get; set; }

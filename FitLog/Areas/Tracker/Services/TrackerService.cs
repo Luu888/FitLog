@@ -15,6 +15,14 @@ namespace FitLog.Areas.Tracker.Services
         { 
         }
 
+        public override IQueryable<DailyEntry> GetAsQueryable()
+        {
+            return _context
+                .DailyEntries
+                .Include(i => i.Meals)
+                .Where(x => !x.IsDeleted);
+        }
+
         public async Task<int> ImportAsync(List<ImportViewModel> list)
         {
             var now = DateTime.Now;
@@ -23,8 +31,19 @@ namespace FitLog.Areas.Tracker.Services
                 .Select(g => new DailyEntry
                 {
                     Date = g.Key,
-                    CaloriesEaten = g.Sum(x => x.Calories),
-                    CreatedAt = now
+                    CreatedAt = now,
+                    Meals = g.Select(m => new MealEntry
+                    {
+                        MealName = m.MealName,
+                        Calories = m.Calories,
+                        Fat = m.Fat,
+                        SaturatedFat = m.SaturatedFat,
+                        Carbohydrates = m.Carbohydrates,
+                        Sugars = m.Sugars,
+                        Protein = m.Protein,
+                        Fiber = m.Fiber,
+                        Salt = m.Salt
+                    }).ToList()
                 })
                 .ToList();
 

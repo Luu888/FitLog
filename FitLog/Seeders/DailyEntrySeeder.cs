@@ -19,7 +19,6 @@ namespace FitLog.Seed
             {
                 new() {
                     Date = DateTime.Today.AddDays(-2),
-                    CaloriesEaten = 2400,
                     Steps = 8500,
                     WorkoutCalories = 300,
                     CreatedAt = now,
@@ -28,7 +27,6 @@ namespace FitLog.Seed
                 },
                 new() {
                     Date = DateTime.Today.AddDays(-1),
-                    CaloriesEaten = 2200,
                     Steps = 10000,
                     WorkoutCalories = 450,
                     CreatedAt = now,
@@ -37,7 +35,6 @@ namespace FitLog.Seed
                 },
                 new() {
                     Date = DateTime.Today,
-                    CaloriesEaten = 2000,
                     Steps = 7500,
                     WorkoutCalories = 250,
                     CreatedAt = now,
