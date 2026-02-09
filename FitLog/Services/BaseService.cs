@@ -25,7 +25,7 @@ namespace FitLog.Services
 
         public virtual async Task<T?> GetAsync(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            return await GetAsQueryable().SingleOrDefaultAsync(x => x.Id == id);
         }
     }
 }

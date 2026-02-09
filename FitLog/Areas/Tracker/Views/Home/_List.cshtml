@@ -30,12 +30,7 @@
                         <td>@item.Steps.ToString("N0")</td>
                         <td>@item.WorkoutCalories.ToString("N2")</td>
                         <td class="text-center">
-                            <a asp-area="Tracker"
-                               asp-controller="Home"
-                               asp-action="Edit"
-                               asp-route-id="@item.Id"
-                               class="btn btn-sm btn-primary"
-                               title="Edit">
+                            <a asp-area="Tracker" asp-controller="Home" asp-action="Edit"asp-route-id="@item.Id" class="btn btn-sm btn-primary" title="Edit">
                                 <i class="bi bi-pencil"></i>
                             </a>
                         </td>

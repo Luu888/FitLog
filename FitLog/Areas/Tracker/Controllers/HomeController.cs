@@ -5,7 +5,6 @@ using FitLog.Helpers;
 using FitLog.Models.Enums.Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
 
 namespace FitLog.Areas.Tracker.Controllers
 {
@@ -25,7 +24,6 @@ namespace FitLog.Areas.Tracker.Controllers
         public async Task<IActionResult> Index()
         {
             var entities = await _service.GetAllAsync();
-
             var viewModel = _mapper.Map<List<IndexViewModel>>(entities);
 
             return View(viewModel);
@@ -36,13 +34,25 @@ namespace FitLog.Areas.Tracker.Controllers
         {
             var entities = await _service.GetAllAsync();
             var viewModel = _mapper.Map<List<IndexViewModel>>(entities);
+
             return PartialView("_List", viewModel);
         }
+
+        public async Task<IActionResult> Edit(int id) 
+        {
+            var entity = await _service.GetAsync(id);
+            var viewModel = _mapper.Map<EditViewModel>(entity);
+
+            return Json(viewModel);
+        }
+
+        #region - IMPORT -
 
         [HttpGet]
         public IActionResult ImportModal()
         {
             var model = new ImportViewModel();
+
             return PartialView("_ImportModal", model);
         }
 
@@ -66,8 +76,9 @@ namespace FitLog.Areas.Tracker.Controllers
             {
                 return ToastHelper.ToJsonResult<FitatuImportError>((int)FitatuImportError.FileNotFound);
             }
-
         }
+
+        #endregion
 
     }
 }

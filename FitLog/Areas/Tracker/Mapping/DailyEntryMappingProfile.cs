@@ -9,6 +9,14 @@ namespace FitLog.Areas.Tracker.Mapping
         public DailyEntryMappingProfile()
         {
             CreateMap<DailyEntry, IndexViewModel>();
+
+            CreateMap<DailyEntry, EditViewModel>();
+            CreateMap<EditViewModel, DailyEntry>();
+
+            CreateMap<CreateViewModel, DailyEntry>();
+
+            CreateMap<MealEntry, MealViewModel>();
+            CreateMap<MealViewModel, MealEntry>();
         }
     }
 }
