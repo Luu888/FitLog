@@ -1,0 +1,125 @@
+﻿@using FitLog.Areas.Tracker.ViewModels.Home
+@model EditViewModel
+
+@{
+    ViewData["Title"] = Model.Id.HasValue ? "Edit day" : "Add day";
+}
+
+<form method="post">
+    <div class="card shadow-sm border-0" style="border-radius:16px;">
+        <div class="card-body">
+
+            <h4 class="fw-bold mb-4">
+                <i class="bi bi-calendar-check me-2"></i>
+                @ViewData["Title"]
+            </h4>
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input asp-for="Date" type="date" class="form-control" />
+                        <label asp-for="Date">Date</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input asp-for="Steps" class="form-control" placeholder="Steps" />
+                        <label asp-for="Steps">Steps</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input asp-for="WorkoutCalories" class="form-control" placeholder="Workout calories" />
+                        <label asp-for="WorkoutCalories">Workout calories</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-semibold mb-0">
+                    <i class="bi bi-egg-fried me-2"></i>Meals
+                </h5>
+                <button type="button" class="btn btn-fit-green btn-sm" onclick="addMeal()">
+                    <i class="bi bi-plus-lg"></i> Add meal
+                </button>
+            </div>
+
+            <div id="meals-container">
+                @for (int i = 0; i < Model.Meals.Count; i++)
+                {
+                    <div class="card border-0 shadow-sm mb-3 meal-item d-flex align-items-center">
+                        <div class="card-body">
+
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto d-flex align-items-center">
+                                    <span class="fw-bold fs-5 meal-number me-2">@(@i + 1)</span>
+                                </div>
+
+                                <input type="hidden" asp-for="Meals[i].Id" />
+                                <input type="hidden" asp-for="Meals[i].DailyEntryId" />
+
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input asp-for="Meals[i].MealName" class="form-control" />
+                                        <label>Meal name</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-floating">
+                                        <input asp-for="Meals[i].Calories" class="form-control" />
+                                        <label>Calories</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-floating">
+                                        <input asp-for="Meals[i].Protein" class="form-control" />
+                                        <label>Protein</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-floating">
+                                        <input asp-for="Meals[i].Carbohydrates" class="form-control" />
+                                        <label>Carbs</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-floating">
+                                        <input asp-for="Meals[i].Fat" class="form-control" />
+                                        <label>Fat</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 d-flex align-items-center">
+                                    <button type="button"
+                                            class="btn btn-outline-danger w-100"
+                                            onclick="removeMeal(this)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-fit-orange">
+                    <i class="bi bi-check-lg me-1"></i> Save
+                </button>
+            </div>
+
+        </div>
+    </div>
+</form>

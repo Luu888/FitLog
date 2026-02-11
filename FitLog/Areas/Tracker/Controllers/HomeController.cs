@@ -43,7 +43,7 @@ namespace FitLog.Areas.Tracker.Controllers
             var entity = await _service.GetAsync(id);
             var viewModel = _mapper.Map<EditViewModel>(entity);
 
-            return Json(viewModel);
+            return View(viewModel);
         }
 
         #region - IMPORT -
