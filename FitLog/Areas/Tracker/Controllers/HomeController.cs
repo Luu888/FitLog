@@ -2,6 +2,7 @@
 using FitLog.Areas.Tracker.Services;
 using FitLog.Areas.Tracker.ViewModels.Home;
 using FitLog.Helpers;
+using FitLog.Models.DatabaseEntities;
 using FitLog.Models.Enums.Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,21 @@ namespace FitLog.Areas.Tracker.Controllers
             var viewModel = _mapper.Map<EditViewModel>(entity);
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditViewModel viewModel)
+        {
+            if(viewModel == null)
+                return BadRequest();
+
+
+            var entity = _mapper.Map<DailyEntry>(viewModel);
+            //var viewModel = _mapper.Map<EditViewModel>(entity);
+
+            int result = await _service.UpdateAsync(id, entity);
+
+            return RedirectToAction(nameof(Edit), new { id });
         }
 
         #region - IMPORT -

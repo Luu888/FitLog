@@ -27,5 +27,10 @@ namespace FitLog.Services
         {
             return await GetAsQueryable().SingleOrDefaultAsync(x => x.Id == id);
         }
+
+        public virtual Task<int> UpdateAsync(int id, T entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

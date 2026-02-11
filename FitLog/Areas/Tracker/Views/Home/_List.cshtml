@@ -8,12 +8,12 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Created</th>
-                        <th>Updated</th>
+                        @* <th>Created</th> *@
+                        @* <th>Updated</th> *@
                         <th>Date</th>
                         <th>Calories</th>
                         <th>Steps</th>
-                        <th>Workout</th>
+                        <th>Workout calories</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -24,8 +24,8 @@
                         {
                             <tr class="">
                                 <td>@item.Id</td>
-                                <td>@item.CreatedAt.ToString("g")</td>
-                                <td>@(item.UpdatedAt?.ToString("g") ?? "")</td>
+                                @* <td>@item.CreatedAt.ToString("g")</td> *@
+                                @* <td>@(item.UpdatedAt?.ToString("g") ?? "")</td> *@
                                 <td>@item.Date.ToString("yyyy-MM-dd")</td>
                                 <td class="fw-semibold">
                                     @item.CaloriesEaten.ToString("N0")

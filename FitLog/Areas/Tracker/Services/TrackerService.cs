@@ -1,5 +1,6 @@
 ﻿
 using FitLog.Areas.Tracker.ViewModels.Home;
+using FitLog.Data;
 using FitLog.Models;
 using FitLog.Models.DatabaseEntities;
 using FitLog.Models.Enums.Errors;
@@ -69,5 +70,21 @@ namespace FitLog.Areas.Tracker.Services
             return await _context.SaveChangesAsync();
         }
 
+        public override async Task<int> UpdateAsync(int id, DailyEntry entity)
+        {
+            if (entity?.Id != id)
+                return -2;
+
+            var originalEntity = await GetAsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+
+            _context.TryUpdate(originalEntity,
+                entity,
+                key => key.Id,
+                field => field.WorkoutCalories,
+                field => field.Steps
+                );
+
+            return await _context.SaveChangesAsync();
+        }
     }
 }
