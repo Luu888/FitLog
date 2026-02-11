@@ -18,7 +18,11 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--fit-bg);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -28,4 +32,90 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+:root {
+    --fit-orange: #ff7a18;
+    --fit-orange-dark: #e86400;
+    --fit-green: #28a745;
+    --fit-green-dark: #1f8a3a;
+    --fit-bg: #f5f7f6;
+}
+
+.fit-navbar {
+    background: linear-gradient(90deg, var(--fit-orange), var(--fit-green));
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.fit-navbar .navbar-brand {
+    font-weight: 700;
+    color: white !important;
+    letter-spacing: 1px;
+}
+
+.fit-navbar .nav-link {
+    color: white !important;
+    opacity: 0.9;
+}
+
+.fit-navbar .nav-link:hover {
+    opacity: 1;
+}
+
+.main-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+.btn-fit-orange {
+    background-color: var(--fit-orange);
+    border: none;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-fit-orange:hover {
+    background-color: var(--fit-orange-dark);
+}
+
+.btn-fit-green {
+    background-color: var(--fit-green);
+    border: none;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-fit-green:hover {
+    background-color: var(--fit-green-dark);
+}
+
+footer {
+    background: white;
+    padding: 12px 0;
+    font-size: 14px;
+}
+
+main {
+    flex: 1;
+}
+
+.table.fit-table thead th {
+    background-color: #f1f3f5;
+    color: #333;
+    font-weight: 600;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.table.fit-table.table-hover tbody tr:hover > * {
+    background-color: #f8f9fa;
+}
+
+.table.fit-table td,
+.table.fit-table th {
+    padding: 14px 16px;
+    vertical-align: middle;
+    border-color: #f0f0f0;
 }
