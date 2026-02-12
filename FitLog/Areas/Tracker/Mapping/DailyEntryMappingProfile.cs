@@ -17,6 +17,9 @@ namespace FitLog.Areas.Tracker.Mapping
 
             CreateMap<MealEntry, MealViewModel>();
             CreateMap<MealViewModel, MealEntry>();
+
+            CreateMap<DailyEntry, DaySummaryViewModel>();
+            CreateMap<DaySummaryViewModel, DailyEntry>();
         }
     }
 }

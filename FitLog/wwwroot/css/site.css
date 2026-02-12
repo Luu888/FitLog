@@ -119,3 +119,52 @@ main {
     vertical-align: middle;
     border-color: #f0f0f0;
 }
+
+.fit-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 16px;
+    height: 100%;
+}
+
+.fit-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 22px;
+}
+
+.bg-orange {
+    background: var(--fit-orange);
+}
+
+.bg-green {
+    background: var(--fit-green);
+}
+
+.fit-stat-label {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.fit-stat-value {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.macro-value {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.macro-label {
+    font-size: 12px;
+    color: #6c757d;
+}

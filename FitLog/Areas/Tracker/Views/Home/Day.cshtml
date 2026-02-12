@@ -1,0 +1,145 @@
+﻿@using FitLog.Areas.Tracker.ViewModels.Home
+@model DaySummaryViewModel
+
+@{
+    ViewData["Title"] = "Day summary";
+}
+
+<div class="card shadow-sm border-0 mx-auto" style="border-radius:16px; max-width:1000px;">
+    <div class="card-body p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1">
+                    <i class="bi bi-calendar-check me-2"></i>
+                    @Model.Date.ToString("dddd, dd MMM yyyy")
+                </h4>
+
+                <div class="text-muted small">
+                    Created: @Model.CreatedAt.ToString("g")
+                    @if (Model.UpdatedAt.HasValue)
+                    {
+                        <span class="ms-2">
+                            | Updated: @Model.UpdatedAt.Value.ToString("g")
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <a asp-action="Edit" asp-route-id="@Model.Id"
+               class="btn btn-fit-orange">
+                <i class="bi bi-pencil me-1"></i> Edit
+            </a>
+        </div>
+
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+                <div class="fit-stat-card">
+                    <div class="fit-stat-icon bg-orange">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <div>
+                        <div class="fit-stat-label">Calories eaten</div>
+                        <div class="fit-stat-value">
+                            @Model.CaloriesEaten.ToString("N0")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="fit-stat-card">
+                    <div class="fit-stat-icon bg-green">
+                        <i class="fa-solid fa-shoe-prints"></i>
+                    </div>
+                    <div>
+                        <div class="fit-stat-label">Steps</div>
+                        <div class="fit-stat-value">
+                            @Model.Steps.ToString("N0")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="fit-stat-card">
+                    <div class="fit-stat-icon bg-orange">
+                        <i class="bi bi-fire"></i>
+                    </div>
+                    <div>
+                        <div class="fit-stat-label">Workout calories</div>
+                        <div class="fit-stat-value">
+                            @Model.WorkoutCalories.ToString("N0")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <h5 class="fw-semibold mb-3">
+            <i class="bi bi-egg-fried me-2"></i>Meals
+        </h5>
+
+        @if (Model.Meals != null && Model.Meals.Any())
+        {
+            foreach (var meal in Model.Meals)
+            {
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0">@meal.MealName</h6>
+                            <span class="badge bg-light text-dark">
+                                @meal.Calories.ToString("N0") kcal
+                            </span>
+                        </div>
+
+                        <div class="row text-center">
+
+                            <div class="col">
+                                <div class="macro-value">@meal.Protein.ToString("N1") g</div>
+                                <div class="macro-label">Protein</div>
+                            </div>
+
+                            <div class="col">
+                                <div class="macro-value">@meal.Carbohydrates.ToString("N1") g</div>
+                                <div class="macro-label">Carbs</div>
+                            </div>
+
+                            <div class="col">
+                                <div class="macro-value">@meal.Fat.ToString("N1") g</div>
+                                <div class="macro-label">Fat</div>
+                            </div>
+
+                            <div class="col">
+                                <div class="macro-value">@meal.Sugars.ToString("N1") g</div>
+                                <div class="macro-label">Sugars</div>
+                            </div>
+
+                            <div class="col">
+                                <div class="macro-value">@meal.Fiber.ToString("N1") g</div>
+                                <div class="macro-label">Fiber</div>
+                            </div>
+
+                            <div class="col">
+                                <div class="macro-value">@meal.Salt.ToString("N1") g</div>
+                                <div class="macro-label">Salt</div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-muted text-center py-4">
+                No meals added for this day.
+            </div>
+        }
+
+    </div>
+</div>

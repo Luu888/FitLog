@@ -89,7 +89,9 @@ namespace FitLog.Areas.Tracker.Services
 
         public async Task<DailyEntry> GetSelectedDayAsync(DateTime selectedDate)
         {
-            var entity = await GetAsQueryable().SingleOrDefaultAsync(x => x.Date.Date == selectedDate.Date);
+            var entity = await GetAsQueryable()
+                .SingleOrDefaultAsync(x => x.Date.Date == selectedDate.Date);
+
             if (entity != null)
                 return entity;
 

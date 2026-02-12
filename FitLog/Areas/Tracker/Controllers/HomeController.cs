@@ -67,9 +67,10 @@ namespace FitLog.Areas.Tracker.Controllers
         {
             day = day ?? DateTime.Now;
 
-            var result = await _service.GetSelectedDayAsync(day.Value);
-            
-            return Json(result);
+            var entity = await _service.GetSelectedDayAsync(day.Value);
+            var viewModel = _mapper.Map<DaySummaryViewModel>(entity);
+
+            return View(viewModel);
         }
 
         #region - IMPORT -
