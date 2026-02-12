@@ -86,5 +86,19 @@ namespace FitLog.Areas.Tracker.Services
 
             return await _context.SaveChangesAsync();
         }
+
+        public async Task<DailyEntry> GetSelectedDayAsync(DateTime selectedDate)
+        {
+            var entity = await GetAsQueryable().SingleOrDefaultAsync(x => x.Date.Date == selectedDate.Date);
+            if (entity != null)
+                return entity;
+
+            return new DailyEntry
+            {
+                Date = selectedDate.Date,
+                CreatedByUserId = _currentUserService.UserId,
+                CreatedAt = DateTime.Now
+            };
+        }
     }
 }

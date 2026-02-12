@@ -6,6 +6,7 @@ namespace FitLog.Areas.Tracker.Services
 {
     public interface ITrackerService : IBaseService<DailyEntry>
     {
+        Task<DailyEntry> GetSelectedDayAsync(DateTime selectedDate);
         Task<int> ImportAsync(List<ImportViewModel> list);
     }
 }

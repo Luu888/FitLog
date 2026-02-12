@@ -62,6 +62,16 @@ namespace FitLog.Areas.Tracker.Controllers
             return RedirectToAction(nameof(Edit), new { id });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Day(DateTime? day = null)
+        {
+            day = day ?? DateTime.Now;
+
+            var result = await _service.GetSelectedDayAsync(day.Value);
+            
+            return Json(result);
+        }
+
         #region - IMPORT -
 
         [HttpGet]
