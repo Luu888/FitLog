@@ -24,7 +24,8 @@ namespace FitLog.Areas.Tracker.Services
             return _context
                 .DailyEntries
                 .Include(i => i.Meals)
-                .Where(x => x.CreatedByUserId == _currentUserService.UserId && !x.IsDeleted);
+                .Where(x => x.CreatedByUserId == _currentUserService.UserId && !x.IsDeleted)
+                .OrderByDescending(x => x.Date);
         }
 
         public async Task<int> ImportAsync(List<ImportViewModel> list)
