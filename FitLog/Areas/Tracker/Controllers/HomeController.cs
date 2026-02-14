@@ -55,9 +55,7 @@ namespace FitLog.Areas.Tracker.Controllers
 
 
             var entity = _mapper.Map<DailyEntry>(viewModel);
-            //var viewModel = _mapper.Map<EditViewModel>(entity);
-
-            int result = await _service.UpdateAsync(id, entity);
+            var result = await _service.UpdateAsync(id, entity);
 
             return RedirectToAction(nameof(Edit), new { id });
         }
@@ -71,6 +69,38 @@ namespace FitLog.Areas.Tracker.Controllers
             var viewModel = _mapper.Map<DaySummaryViewModel>(entity);
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> AddMeal(int dayId)
+        {
+            var model = new MealViewModel() { DailyEntryId = dayId };
+
+            return PartialView("_AddMealModal", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddMeal(MealViewModel viewModel)
+        {
+            if (viewModel != null)
+            {
+                var entity = _mapper.Map<MealEntry>(viewModel);
+                var result = await _service.AddMealAsync(entity);
+
+                if(result <= 0)
+                    return ToastHelper.ToJsonResult<MealError>(result);
+
+                return Json(new
+                {
+                    success = result,
+                    message = "Meal added successfully",
+                    type = "success",
+                    redirectUrl = Url.Action(nameof(Edit), new { id = viewModel.DailyEntryId })
+                });
+            }
+            else
+            {
+                return ToastHelper.ToJsonResult<MealError>((int)MealError.EmptyValues);
+            }
         }
 
         #region - IMPORT -

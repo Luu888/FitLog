@@ -15,5 +15,23 @@ namespace FitLog.Models.DatabaseEntities
         public ApplicationUser? UpdatedByUser { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public void SetupCreatedFields(string userId, DateTimeOffset? now = null)
+        {
+            now ??= DateTimeOffset.Now;
+
+            CreatedAt = now.Value;
+            CreatedByUserId = userId;
+            UpdatedAt = null;
+            UpdatedByUserId = null;
+        }
+
+        public void SetupUpdatedFields(string userId, DateTimeOffset? now = null)
+        {
+            now ??= DateTimeOffset.Now;
+
+            UpdatedAt = now.Value;
+            UpdatedByUserId = userId;
+        }
     }
 }

@@ -46,7 +46,7 @@ app.MapStaticAssets();
 
 app.MapGet("/", context =>
 {
-    context.Response.Redirect("/Tracker/Home/Index");
+    context.Response.Redirect("/Tracker/Home/Day");
     return Task.CompletedTask;
 });
 

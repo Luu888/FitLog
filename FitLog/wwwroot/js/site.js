@@ -58,26 +58,63 @@ document.addEventListener('submit', function (e) {
     const formData = new FormData(form);
 
     fetch(form.action, {
-        method: 'POST',
+        method: form.method || 'POST',
         body: formData
     })
         .then(r => r.json())
         .then(data => {
             const modal = bootstrap.Modal.getInstance(modalEl);
             if (modal) modal.hide();
-            window.showToast(data.message, data.type);
 
-            if (data.success) {
-                fetch('/Tracker/Home/Table')
-                    .then(r => r.text())
-                    .then(html => {
-                        document.getElementById('table-container').innerHTML = html;
-                    })
-                    .catch(err => console.error('Error refreshing table:', err));
+            if (window.showToast) {
+                window.showToast(data.message, data.type);
             }
+
+            if (!data.success) return;
+
+            if (data.redirectUrl) {
+                sessionStorage.setItem("pendingToast", JSON.stringify({
+                    message: data.message,
+                    type: data.type
+                }));
+
+                window.location.href = data.redirectUrl;
+                return;
+            }
+
+            const refreshUrl = form.dataset.refreshUrl;
+            const refreshTarget = form.dataset.refreshTarget;
+
+            if (!refreshUrl || !refreshTarget) return;
+
+            fetch(refreshUrl)
+                .then(r => r.text())
+                .then(html => {
+                    const targetEl = document.querySelector(refreshTarget);
+                    if (targetEl) {
+                        targetEl.innerHTML = html;
+                    }
+                })
+                .catch(err => console.error('Error refreshing target:', err));
         })
         .catch(err => {
             console.error(err);
-            window.showToast("Unexpected error during import!", "danger");
+            if (window.showToast) {
+                window.showToast("Unexpected error!", "danger");
+            }
         });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const pending = sessionStorage.getItem("pendingToast");
+    if (!pending) return;
+
+    sessionStorage.removeItem("pendingToast");
+
+    try {
+        const toast = JSON.parse(pending);
+        if (window.showToast) {
+            window.showToast(toast.message, toast.type);
+        }
+    } catch { }
 });

@@ -77,11 +77,15 @@ namespace FitLog.Areas.Tracker.Services
 
             var originalEntity = await GetAsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
+            originalEntity.SetupUpdatedFields(_currentUserService.UserId);
+
             _context.TryUpdate(originalEntity,
                 entity,
                 key => key.Id,
                 field => field.WorkoutCalories,
-                field => field.Steps
+                field => field.Steps,
+                field => field.UpdatedAt,
+                field => field.UpdatedByUserId
                 );
 
             return await _context.SaveChangesAsync();
@@ -95,12 +99,32 @@ namespace FitLog.Areas.Tracker.Services
             if (entity != null)
                 return entity;
 
-            return new DailyEntry
+            entity = new DailyEntry
             {
                 Date = selectedDate.Date,
                 CreatedByUserId = _currentUserService.UserId,
                 CreatedAt = DateTime.Now
             };
+
+            await _context.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            return entity;
+        }
+
+        public async Task<int> AddMealAsync(MealEntry entity)
+        {
+            if (entity == null)
+                return (int)MealError.NotFound;
+
+            if (entity.MealName == null || entity.DailyEntryId == 0)
+                return (int)MealError.EmptyValues;
+
+            entity.SetupCreatedFields(_currentUserService.UserId);
+
+            await _context.MealEntries.AddAsync(entity);
+
+            return await _context.SaveChangesAsync();
         }
     }
 }
