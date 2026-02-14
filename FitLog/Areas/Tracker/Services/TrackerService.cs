@@ -14,7 +14,7 @@ namespace FitLog.Areas.Tracker.Services
         private readonly ICurrentUserService _currentUserService;
 
         public TrackerService(ApplicationDbContext context, ICurrentUserService currentUserService)
-            : base(context)
+            : base(context, currentUserService)
         {
             _currentUserService = currentUserService;
         }
