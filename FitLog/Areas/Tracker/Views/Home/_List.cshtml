@@ -1,5 +1,11 @@
 ﻿@using FitLog.Areas.Tracker.ViewModels.Home
 @model List<IndexViewModel>
+@{
+    var totalCaloriesEaten = Model.Sum(x => x.CaloriesEaten);
+    var totalWorkoutCalories = Model.Sum(x => x.WorkoutCalories);
+    var totalBalance = Model.Sum(x => x.DailyCalorieBalance);
+    var totalSteps = Model.Sum(x => x.Steps);
+}
 
 <div class="card shadow-sm border-0" style="border-radius:16px;">
     <div class="card-body p-0">
@@ -11,6 +17,7 @@
                         <th>Calories</th>
                         <th>Steps</th>
                         <th>Workout calories</th>
+                        <th>Daily calorie balance</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -28,6 +35,9 @@
                                 <td class="fw-semibold">
                                     @item.WorkoutCalories.ToString("N0")
                                 </td>
+                                <td class="fw-semibold">
+                                    @item.DailyCalorieBalance.ToString("N0")
+                                </td>
                                 <td class="text-center">
                                     <a asp-area="Tracker"
                                        asp-controller="Home"
@@ -40,6 +50,14 @@
                                 </td>
                             </tr>
                         }
+                        <tr class="table-secondary fw-bold">
+                            <td class="text-end">Total</td>
+                            <td>@totalCaloriesEaten.ToString("N0") kcal</td>
+                            <td>@totalSteps.ToString("N0")</td>
+                            <td>@totalWorkoutCalories.ToString("N0") kcal</td>
+                            <td class="@(totalBalance <= 0 ? "text-success" : "text-danger")"> @totalBalance.ToString("N0") kcal </td>
+                            <td></td>
+                        </tr>
                     }
                     else
                     {

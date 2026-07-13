@@ -1,4 +1,6 @@
-﻿namespace FitLog.Areas.Tracker.ViewModels.Home
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace FitLog.Areas.Tracker.ViewModels.Home
 {
     public class IndexViewModel
     {
@@ -10,5 +12,8 @@
         public decimal CaloriesEaten { get; set; }
         public decimal Steps { get; set; }
         public decimal WorkoutCalories { get; set; }
+
+        [NotMapped]
+        public decimal DailyCalorieBalance => CaloriesEaten - WorkoutCalories;
     }
 }
