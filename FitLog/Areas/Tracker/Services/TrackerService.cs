@@ -57,7 +57,7 @@ namespace FitLog.Areas.Tracker.Services
 
             var datesToCheck = entries.Select(e => e.Date).ToList();
             var existingDates = await GetAsQueryable()
-                .Where(d => datesToCheck.Any(dc => dc.Date == d.Date.Date && !d.IsDeleted))
+                .Where(d => datesToCheck.Any(dc => dc.Date == d.Date.Date && !d.IsDeleted && d.Meals.Count != 0))
                 .Select(d => d.Date.Date)
                 .ToListAsync();
 
